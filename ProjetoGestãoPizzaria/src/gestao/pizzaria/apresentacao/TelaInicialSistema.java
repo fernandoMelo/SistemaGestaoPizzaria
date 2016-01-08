@@ -33,6 +33,7 @@ public class TelaInicialSistema extends javax.swing.JFrame {
 
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuCadastrar = new javax.swing.JMenu();
+        mnuCadastrarCliente = new javax.swing.JMenuItem();
         mnuCadastrarBebidas = new javax.swing.JMenuItem();
         mnuCadastrarPedidos = new javax.swing.JMenuItem();
         mnuCadastrarPizza = new javax.swing.JMenuItem();
@@ -48,6 +49,15 @@ public class TelaInicialSistema extends javax.swing.JFrame {
 
         mnuCadastrar.setText("Cadastrar");
         mnuCadastrar.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+
+        mnuCadastrarCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
+        mnuCadastrarCliente.setText("Clientes");
+        mnuCadastrarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCadastrarClienteActionPerformed(evt);
+            }
+        });
+        mnuCadastrar.add(mnuCadastrarCliente);
 
         mnuCadastrarBebidas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.ALT_MASK));
         mnuCadastrarBebidas.setText("Bebidas");
@@ -78,11 +88,6 @@ public class TelaInicialSistema extends javax.swing.JFrame {
 
         mnuCadastrarUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK));
         mnuCadastrarUsuario.setText("Usuarios");
-        mnuCadastrarUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuCadastrarUsuarioActionPerformed(evt);
-            }
-        });
         mnuCadastrar.add(mnuCadastrarUsuario);
 
         jMenuBar1.add(mnuCadastrar);
@@ -107,10 +112,6 @@ public class TelaInicialSistema extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void mnuCadastrarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCadastrarUsuarioActionPerformed
-        this.exibirTelaPesquisaUsuario();
-    }//GEN-LAST:event_mnuCadastrarUsuarioActionPerformed
-
     private void mnuCadastrarBebidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCadastrarBebidasActionPerformed
         this.exibirTelaPesquisaBebida();
     }//GEN-LAST:event_mnuCadastrarBebidasActionPerformed
@@ -122,6 +123,10 @@ public class TelaInicialSistema extends javax.swing.JFrame {
     private void mnuCadastrarPizzaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCadastrarPizzaActionPerformed
         this.exibirTelaPesquisaPizza();
     }//GEN-LAST:event_mnuCadastrarPizzaActionPerformed
+
+    private void mnuCadastrarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCadastrarClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mnuCadastrarClienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -186,6 +191,7 @@ public class TelaInicialSistema extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu mnuCadastrar;
     private javax.swing.JMenuItem mnuCadastrarBebidas;
+    private javax.swing.JMenuItem mnuCadastrarCliente;
     private javax.swing.JMenuItem mnuCadastrarPedidos;
     private javax.swing.JMenuItem mnuCadastrarPizza;
     private javax.swing.JMenuItem mnuCadastrarUsuario;
