@@ -14,7 +14,55 @@ public class ItemVenda{
     private int id;
     private int Quantidade;
     private int idPedido;
-    private int idPizza;
+    private int idPizza = -1;
     private char tamanho;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getQuantidade() {
+        return Quantidade;
+    }
+
+    public void setQuantidade(int Quantidade) {
+        this.Quantidade = Quantidade;
+    }
+
+    public int getIdPedido() {
+        return idPedido;
+    }
+
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
+    }
+
+    public int getIdPizza() {
+        return idPizza;
+    }
+
+    public void setIdPizza(int idPizza) {
+        this.idPizza = idPizza;
+    }
+
+    public char getTamanho() {
+        return tamanho;
+    }
+
+    public void setTamanho(char tamanho) {
+        this.tamanho = tamanho;
+    }
+
+    public int getIdBebida() {
+        return idBebida;
+    }
+
+    public void setIdBebida(int idBebida) {
+        this.idBebida = idBebida;
+    }
     private int idBebida;   
 }

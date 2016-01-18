@@ -5,6 +5,11 @@
  */
 package br.com.gestao.pizzaria.apresentacao;
 
+import br.com.gestao.pizzaria.negocio.CaixaBO;
+import br.com.gestao.pizzaria.excecao.GestaoPizzariaException;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author melot_000
@@ -22,6 +27,8 @@ public class TelaInicialSistema extends javax.swing.JFrame {
     CadastrarPizzaForm cadastrarPizzaForm;
     CadastrarClienteForm cadastrarClienteForm;
     CadastrarPedidoForm cadastrarPedidoForm;
+    
+    AbrirCaixaForm abrirCaixaForm;
 
     /**
      * Creates new form TelaInicialSistema
@@ -41,6 +48,10 @@ public class TelaInicialSistema extends javax.swing.JFrame {
 
         lblBackground = new javax.swing.JLabel();
         mnuTelaPrincipal = new javax.swing.JMenuBar();
+        mnuCaixa = new javax.swing.JMenu();
+        mnuAbrirCaixa = new javax.swing.JMenuItem();
+        jSeparator7 = new javax.swing.JPopupMenu.Separator();
+        mnuFecharCaixa = new javax.swing.JMenuItem();
         mnuClientes = new javax.swing.JMenu();
         mnuNovoCliente = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -82,6 +93,34 @@ public class TelaInicialSistema extends javax.swing.JFrame {
         mnuTelaPrincipal.setForeground(new java.awt.Color(51, 51, 51));
         mnuTelaPrincipal.setAlignmentY(0.5F);
         mnuTelaPrincipal.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+
+        mnuCaixa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/gestao/pizzaria/icones/supermarket29.png"))); // NOI18N
+        mnuCaixa.setText("Caixa");
+        mnuCaixa.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        mnuCaixa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        mnuCaixa.setMargin(new java.awt.Insets(2, 20, 2, 10));
+        mnuCaixa.setVerifyInputWhenFocusTarget(false);
+
+        mnuAbrirCaixa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/gestao/pizzaria/icones/dollar6.png"))); // NOI18N
+        mnuAbrirCaixa.setText("Abrir");
+        mnuAbrirCaixa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAbrirCaixaActionPerformed(evt);
+            }
+        });
+        mnuCaixa.add(mnuAbrirCaixa);
+        mnuCaixa.add(jSeparator7);
+
+        mnuFecharCaixa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/gestao/pizzaria/icones/currency16.png"))); // NOI18N
+        mnuFecharCaixa.setText("Fechar");
+        mnuFecharCaixa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuFecharCaixaActionPerformed(evt);
+            }
+        });
+        mnuCaixa.add(mnuFecharCaixa);
+
+        mnuTelaPrincipal.add(mnuCaixa);
 
         mnuClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/gestao/pizzaria/icones/user73.png"))); // NOI18N
         mnuClientes.setText("Clientes");
@@ -327,6 +366,33 @@ public class TelaInicialSistema extends javax.swing.JFrame {
         this.exibirTelaPesquisaUsuario();
     }//GEN-LAST:event_mnuPesquisarUsuarioActionPerformed
 
+    private void mnuAbrirCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAbrirCaixaActionPerformed
+        this.abrirCaixa();
+    }//GEN-LAST:event_mnuAbrirCaixaActionPerformed
+
+    private void mnuFecharCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuFecharCaixaActionPerformed
+        this.fecharCaixa();
+    }//GEN-LAST:event_mnuFecharCaixaActionPerformed
+    
+    private void abrirCaixa(){
+        this.exibirTelaCaixa();
+    }
+    private void fecharCaixa(){
+        int resposta;
+        String mensagem = "Deseja fechar o caixa?";
+        resposta = JOptionPane.showConfirmDialog(null, mensagem, "Fechar caixa", JOptionPane.YES_NO_OPTION);
+        if (resposta == JOptionPane.YES_OPTION) {
+            try {
+                CaixaBO caixaBO = new CaixaBO();
+                caixaBO.fecharCaixa();
+                JOptionPane.showMessageDialog(null,"O caixa foi finalizado com sucesso!","Finalizar caixa", JOptionPane.INFORMATION_MESSAGE);
+            } catch (GestaoPizzariaException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Finalizar caixa", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Erro inesperado! Informe a mensagem de erro ao administrador do sistema", "Abrir caixa", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -360,6 +426,14 @@ public class TelaInicialSistema extends javax.swing.JFrame {
                 new TelaInicialSistema().setVisible(true);
             }
         });
+    }
+    
+    private void exibirTelaCaixa() {
+        if (abrirCaixaForm == null) {
+            abrirCaixaForm = new AbrirCaixaForm();
+        }
+        abrirCaixaForm.setVisible(true);
+        abrirCaixaForm.toFront();
     }
 
     private void exibirTelaPesquisaBebida() {
@@ -450,10 +524,14 @@ public class TelaInicialSistema extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
+    private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JLabel lblBackground;
+    private javax.swing.JMenuItem mnuAbrirCaixa;
     private javax.swing.JMenu mnuAjuda;
     private javax.swing.JMenu mnuBebidas;
+    private javax.swing.JMenu mnuCaixa;
     private javax.swing.JMenu mnuClientes;
+    private javax.swing.JMenuItem mnuFecharCaixa;
     private javax.swing.JMenuItem mnuMudarSenha;
     private javax.swing.JMenuItem mnuNovaBebida;
     private javax.swing.JMenuItem mnuNovaPizza;

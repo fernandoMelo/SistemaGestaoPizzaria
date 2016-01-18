@@ -16,16 +16,7 @@ public class Bebida {
     private String volume;
     private double preco;
     private int id = -1;
-    private int quantidade;
-
-    public int getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
-
+    
     public int getId() {
         return id;
     }

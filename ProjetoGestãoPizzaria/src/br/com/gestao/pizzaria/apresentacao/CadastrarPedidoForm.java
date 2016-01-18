@@ -7,12 +7,12 @@ package br.com.gestao.pizzaria.apresentacao;
 
 import br.com.gestao.pizzaria.entidade.Bebida;
 import br.com.gestao.pizzaria.entidade.Cliente;
+import br.com.gestao.pizzaria.entidade.ItemVenda;
 import br.com.gestao.pizzaria.entidade.Pedido;
 import br.com.gestao.pizzaria.entidade.Pizza;
 import br.com.gestao.pizzaria.negocio.BebidaBO;
 import br.com.gestao.pizzaria.negocio.ClienteBO;
 import br.com.gestao.pizzaria.negocio.PizzaBO;
-import static java.lang.Double.parseDouble;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -27,27 +27,43 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
     private PesquisarPedidoForm pesquisarPedidoForm;
     private Pedido pedido;
 
-    private Cliente cliente = new Cliente();
+    private ItemVenda itemVenda = new ItemVenda();
+    private List<ItemVenda> Itens = new ArrayList<>();
+
+    private Cliente cliente;
     private List<Cliente> clientes = new ArrayList<>();
 
-    private Bebida bebida = new Bebida();
+    private Bebida bebida;
     private List<Bebida> bebidas = new ArrayList<>();
 
-    private Pizza pizza = new Pizza();
+    private Pizza pizza;
     private List<Pizza> pizzas = new ArrayList<>();
-
-    private List listaPedidos = new ArrayList();
 
     /**
      * Creates new form CadastrarUsuario
      */
     public CadastrarPedidoForm() {
+        this.cliente = new Cliente();
+        this.pizza = new Pizza();
+        this.bebida = new Bebida();
         this.prepararTela();
     }
 
     private void prepararTela() {
         this.initComponents();
+        this.inicializarComboTamanhoPizza();
         this.desabilitarAdicionarItem();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void inicializarComboTamanhoPizza() {
+        cmbTamanho.removeAllItems();
+        cmbTamanho.addItem("Tamanho:");
+        cmbTamanho.addItem("Pequena");
+        cmbTamanho.addItem("Média");
+        cmbTamanho.addItem("Grande");
+        cmbTamanho.addItem("Gigante");
+        cmbTamanho.setEnabled(false);
     }
 
     /**
@@ -83,6 +99,7 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
         btnADD = new javax.swing.JButton();
         spnQuantidade = new javax.swing.JSpinner();
         btnRemover = new javax.swing.JButton();
+        cmbTamanho = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Pedido");
@@ -168,6 +185,11 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
         grpAdicionarItem.add(rdoPizza);
         rdoPizza.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         rdoPizza.setText("Pizza");
+        rdoPizza.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                rdoPizzaItemStateChanged(evt);
+            }
+        });
         rdoPizza.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdoPizzaActionPerformed(evt);
@@ -175,11 +197,6 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
         });
 
         txtTipoPedido.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtTipoPedido.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTipoPedidoActionPerformed(evt);
-            }
-        });
 
         lblAcaoTipoPedido.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -199,11 +216,6 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
 
             }
         ));
-        tblItensAdicionados.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblItensAdicionadosMouseClicked(evt);
-            }
-        });
         jScrollPane2.setViewportView(tblItensAdicionados);
 
         lblItensAdicionados.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -233,6 +245,9 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
             }
         });
 
+        cmbTamanho.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cmbTamanho.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout pnlCadastroDePedidoLayout = new javax.swing.GroupLayout(pnlCadastroDePedido);
         pnlCadastroDePedido.setLayout(pnlCadastroDePedidoLayout);
         pnlCadastroDePedidoLayout.setHorizontalGroup(
@@ -244,7 +259,7 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
                         .addGroup(pnlCadastroDePedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlCadastroDePedidoLayout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlCadastroDePedidoLayout.createSequentialGroup()
                                 .addGroup(pnlCadastroDePedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,7 +277,7 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(lblIr, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(lblTipoItem))
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(0, 1186, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(pnlCadastroDePedidoLayout.createSequentialGroup()
                         .addComponent(rdoBebida)
@@ -281,7 +296,9 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
                         .addComponent(lblQuantidade)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(spnQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
+                        .addComponent(cmbTamanho, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(btnADD)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -313,20 +330,18 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
                 .addGroup(pnlCadastroDePedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGroup(pnlCadastroDePedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlCadastroDePedidoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlCadastroDePedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblQuantidade)
-                            .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(spnQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnADD, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(pnlCadastroDePedidoLayout.createSequentialGroup()
-                        .addGap(28, 119, Short.MAX_VALUE)
-                        .addGroup(pnlCadastroDePedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlCadastroDePedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cmbTamanho)
+                    .addGroup(pnlCadastroDePedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblQuantidade)
+                        .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(spnQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnADD, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addGroup(pnlCadastroDePedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -356,12 +371,8 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFecharActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-
+        this.salvarPedido();
     }//GEN-LAST:event_btnSalvarActionPerformed
-
-    private void txtTipoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTipoPedidoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTipoPedidoActionPerformed
 
     private void rdoBebidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoBebidaActionPerformed
         this.buscarBebida();
@@ -394,10 +405,6 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
         this.buscarPizza();
     }//GEN-LAST:event_rdoPizzaActionPerformed
 
-    private void tblItensAdicionadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblItensAdicionadosMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tblItensAdicionadosMouseClicked
-
     private void btnADDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnADDActionPerformed
         this.adicionarItemTabela();
     }//GEN-LAST:event_btnADDActionPerformed
@@ -416,16 +423,20 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
         this.removerItem();
     }//GEN-LAST:event_btnRemoverActionPerformed
 
+    private void rdoPizzaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdoPizzaItemStateChanged
+        cmbTamanho.setEnabled(false);
+    }//GEN-LAST:event_rdoPizzaItemStateChanged
+    
+    private void salvarPedido(){
+    
+    }
     private void removerItem() {
         int linhaSelecionada = tblItensAdicionados.getSelectedRow();
 
         if (rdoBalcao.isSelected() || rdoMesa.isSelected() || rdoDelivery.isSelected()) {
-
             if (linhaSelecionada > -1) {
-
-                listaPedidos.remove(linhaSelecionada);
-                this.carregarTabelaItensPedidos();
-
+                Itens.remove(linhaSelecionada);
+                this.carregarTabelaItens();
             } else {
                 String mensagem = "Nenhum item selecionado.";
                 JOptionPane.showMessageDialog(this, mensagem, "Remover item",
@@ -448,26 +459,34 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
         rdoPizza.setEnabled(true);
     }
 
-    @SuppressWarnings("unchecked")
     private void adicionarItemTabela() {
-
+        itemVenda = new ItemVenda();
+        itemVenda.setQuantidade((int) spnQuantidade.getValue());
         int linhaSelecionada = tblGenerica.getSelectedRow();
-
         if (rdoBalcao.isSelected() || rdoMesa.isSelected() || rdoDelivery.isSelected()) {
-
             if (linhaSelecionada > -1) {
-                if (rdoBebida.isSelected()) {
-                    bebida = bebidas.get(tblGenerica.getSelectedRow());
-                    bebida.setQuantidade((int) spnQuantidade.getValue());
-                    listaPedidos.add(bebida);
-                } else {
-                    pizza = pizzas.get(tblGenerica.getSelectedRow());
-                    pizza.setQuantidade((int) spnQuantidade.getValue());
-                    listaPedidos.add(pizza);
+                if (rdoPizza.isSelected()) {
+                    if (cmbTamanho.getSelectedIndex() >= 1) {
+                        itemVenda.setIdPizza(pizzas.get(linhaSelecionada).getId());
+                        if (cmbTamanho.getSelectedIndex() == 1) {
+                            itemVenda.setTamanho('P');
+                        } else if (cmbTamanho.getSelectedIndex() == 2) {
+                            itemVenda.setTamanho('M');
+                        } else if (cmbTamanho.getSelectedIndex() == 3) {
+                            itemVenda.setTamanho('G');
+                        } else if (cmbTamanho.getSelectedIndex() == 4) {
+                            itemVenda.setTamanho('F');
+                        }
+                        Itens.add(itemVenda);
+                    } else {
+                        String mensagem = "Nenhum item selecionado.";
+                        JOptionPane.showMessageDialog(this, mensagem, "Adicionar item",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else if (rdoBebida.isSelected()) {
+                    itemVenda.setIdBebida(bebidas.get(linhaSelecionada).getId());
+                    Itens.add(itemVenda);
                 }
-
-                this.carregarTabelaItensPedidos();
-
             } else {
                 String mensagem = "Nenhum item selecionado.";
                 JOptionPane.showMessageDialog(this, mensagem, "Adicionar item",
@@ -478,16 +497,16 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, mensagem, "Tipo do pedido",
                     JOptionPane.INFORMATION_MESSAGE);
         }
+        this.carregarTabelaItens();
     }
 
-    private void carregarTabelaItensPedidos() {
-        ModeloTabelaItensAdicionados modelo = new ModeloTabelaItensAdicionados();
+    private void carregarTabelaItens() {
+        ModeloTabelaItens modelo = new ModeloTabelaItens();
         tblItensAdicionados.setModel(modelo);
     }
 
     private void pesquisarCliente() {
 
-        cliente = new Cliente();
         ClienteBO clienteBO = new ClienteBO();
         try {
             clientes = clienteBO.pesquisar("NOME", txtTipoPedido.getText());
@@ -515,6 +534,7 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
     }
 
     private void buscarPizza() {
+        cmbTamanho.setEnabled(true);
         pizza = new Pizza();
         PizzaBO pizzaBO = new PizzaBO();
         try {
@@ -603,6 +623,7 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
     private javax.swing.JButton btnFechar;
     private javax.swing.JButton btnRemover;
     private javax.swing.JButton btnSalvar;
+    private javax.swing.JComboBox cmbTamanho;
     private javax.swing.ButtonGroup grpAdicionarItem;
     private javax.swing.ButtonGroup grpTipoPedido;
     private javax.swing.JScrollPane jScrollPane1;
@@ -745,7 +766,7 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
                 return pizza.getPrecoPequena();
             } else if (columnIndex == 3) {
                 return pizza.getPrecoMedia();
-            } else if (columnIndex == 2) {
+            } else if (columnIndex == 4) {
                 return pizza.getPrecoGrande();
             } else {
                 return pizza.getPrecoGigante();
@@ -754,7 +775,7 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
 
     }
 
-    private class ModeloTabelaItensAdicionados extends AbstractTableModel {
+    private class ModeloTabelaItens extends AbstractTableModel {
 
         @Override
         public String getColumnName(int coluna) {
@@ -771,7 +792,7 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
 
         @Override
         public int getRowCount() {
-            return listaPedidos.size();
+            return (Itens.size());
         }
 
         @Override
@@ -781,32 +802,52 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-
-            if (listaPedidos.get(rowIndex) instanceof Bebida) {
-                bebida = (Bebida) listaPedidos.get(rowIndex);
-                if (columnIndex == 0) {
-                    return "Bebida";
-                } else if (columnIndex == 1) {
-                    return bebida.getMarca() + ", " + bebida.getSabor() + ", " + bebida.getVolume();
-                } else if (columnIndex == 2) {
-                    return bebida.getPreco();
-                } else {
-                    return bebida.getQuantidade();
-                }
-            } else {
-                pizza = (Pizza) listaPedidos.get(rowIndex);
+            if (Itens.get(rowIndex).getIdPizza() > -1) {
                 if (columnIndex == 0) {
                     return "Pizza";
                 } else if (columnIndex == 1) {
-                    return pizza.getNome();
+                    for (Pizza pizza : pizzas) {
+                        if (pizza.getId() == Itens.get(rowIndex).getIdPizza()) {
+                            return pizza.getNome();
+                        }
+                    }
                 } else if (columnIndex == 2) {
-                    return pizza.getPrecoPequena();
+                    for (Pizza pizza : pizzas) {
+                        if (pizza.getId() == Itens.get(rowIndex).getIdPizza()) {
+                            if (Itens.get(rowIndex).getTamanho() == 'P') {
+                                return pizza.getPrecoPequena();
+                            } else if (Itens.get(rowIndex).getTamanho() == 'M') {
+                                return pizza.getPrecoMedia();
+                            } else if (Itens.get(rowIndex).getTamanho() == 'G') {
+                                return pizza.getPrecoGrande();
+                            } else {
+                                return pizza.getPrecoGigante();
+                            }
+                        }
+                    }
                 } else {
-                    return pizza.getQuantidade();
+                    return Itens.get(rowIndex).getQuantidade();
+                }
+            } else {
+                if (columnIndex == 0) {
+                    return "Bebida";
+                } else if (columnIndex == 1) {
+                    for (Bebida bebida : bebidas) {
+                        if (bebida.getId() == Itens.get(rowIndex).getIdBebida()) {
+                            return bebida.getMarca() + ", " + bebida.getSabor() + ", " + bebida.getVolume();
+                        }
+                    }
+                } else if (columnIndex == 2) {
+                    for (Bebida bebida : bebidas) {
+                        if (bebida.getId() == Itens.get(rowIndex).getIdBebida()) {
+                            return bebida.getPreco();
+                        }
+                    }
+                } else {
+                    return Itens.get(rowIndex).getQuantidade();
                 }
             }
-
-        }   
-
+            return null;
+        }
     }
 }
