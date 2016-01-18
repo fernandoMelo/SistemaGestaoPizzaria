@@ -5,7 +5,7 @@
  */
 package br.com.gestao.pizzaria.persistencia;
 
-import br.com.gestao.pizzaria.entidade.Cliente;
+import br.com.gestao.pizzaria.entidade.Bebida;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,14 +17,14 @@ import java.util.List;
  *
  * @author melot_000
  */
-public class ClienteDAO {
+public class PedidoDao {
 
-    private static final String SQL_INSERT = "INSERT INTO CLIENTE (NOME, CPF, RG, DATA_NASCIMENTO, SEXO, TELEFONE, ENDERECO) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String SQL_BUSCAR_TODOS = "SELECT NOME, CPF, RG, DATA_NASCIMENTO, SEXO, TELEFONE, ENDERECO, ID FROM CLIENTE ORDER BY NOME";
-    private static final String SQL_UPDATE = "UPDATE CLIENTE SET NOME = ?, CPF = ?, RG = ?, DATA_NASCIMENTO = ?, SEXO = ?, TELEFONE = ?, ENDERECO = ? WHERE ID = ?";
-    private static final String SQL_DELETE = "DELETE FROM CLIENTE  WHERE ID = ? ";
+    private static final String SQL_INSERT = "INSERT INTO BEBIDA (MARCA, SABOR, VOLUME, PRECO) VALUES (?, ?, ?, ?)";
+    private static final String SQL_BUSCAR_TODAS = "SELECT MARCA, SABOR, VOLUME, PRECO, ID FROM BEBIDA ORDER BY MARCA";
+    private static final String SQL_UPDATE = "UPDATE BEBIDA SET MARCA = ?, SABOR = ?, VOLUME = ?, PRECO = ? WHERE ID = ?";
+    private static final String SQL_DELETE = "DELETE FROM BEBIDA WHERE ID = ? ";
     
-    public void inserir(Cliente cliente) throws SQLException {
+    public void inserir(Bebida bebida) throws SQLException {
         Connection conexao = null;
         PreparedStatement comando = null;
 
@@ -34,18 +34,10 @@ public class ClienteDAO {
             //Cria o comando de inserir dados
             comando = conexao.prepareStatement(SQL_INSERT);
             //Atribui os parâmetros (Note que no BD o index inicia por 1)
-            comando.setString(1, cliente.getNome());
-            comando.setString(2, cliente.getCPF());
-            comando.setString(3, cliente.getRG());           
-            
-            java.sql.Date data = new java.sql.Date(cliente.getDataNascimento().getTime());
-            comando.setDate(4, data);
-            
-            String sexo = String.valueOf(cliente.getSexo());            
-            comando.setString(5, sexo);
-            
-            comando.setString(6, cliente.getTelefone());
-            comando.setString(7, cliente.getEndereco());
+            comando.setString(1, bebida.getMarca());
+            comando.setString(2, bebida.getSabor());
+            comando.setString(3, bebida.getVolume());
+            comando.setDouble(4, bebida.getPreco());
 
             comando.execute();
             conexao.commit();
@@ -59,7 +51,7 @@ public class ClienteDAO {
         }
     }
 
-    public void alterar(Cliente cliente) throws SQLException {
+    public void alterar(Bebida bebida) throws SQLException {
         Connection conexao = null;
         PreparedStatement comando = null;
 
@@ -69,19 +61,11 @@ public class ClienteDAO {
             //Cria o comando de inserir dados
             comando = conexao.prepareStatement(SQL_UPDATE);
             //Atribui os parâmetros (Note que no BD o index inicia por 1)
-            comando.setString(1, cliente.getNome());
-            comando.setString(2, cliente.getCPF());
-            comando.setString(3, cliente.getRG());
-            
-            java.sql.Date data = new java.sql.Date(cliente.getDataNascimento().getTime());
-            comando.setDate(4, data);
-            
-            String sexo = String.valueOf(cliente.getSexo());            
-            comando.setString(5, sexo);
-            
-            comando.setString(6, cliente.getTelefone());
-            comando.setString(7, cliente.getEndereco());           
-            comando.setInt(8, cliente.getId());
+            comando.setString(1, bebida.getMarca());
+            comando.setString(2, bebida.getSabor());
+            comando.setString(3, bebida.getVolume());
+            comando.setDouble(4, bebida.getPreco());
+            comando.setInt(5, bebida.getId());
 
             comando.execute();
             conexao.commit();
@@ -124,57 +108,49 @@ public class ClienteDAO {
         }
     }
 
-    public List<Cliente> buscarTodos() throws SQLException {
+    public List<Bebida> buscarTodas() throws SQLException {
         Connection conexao = null;
         PreparedStatement comando = null;
         ResultSet resultado = null;
 
-        List<Cliente> listaClientes = new ArrayList<>();
+        List<Bebida> listaBebidas = new ArrayList<>();
 
         try {
             //Recupera a conexão
             conexao = BancoDadosUtil.getConnection();
             //Cria o comando de consulta dos dados
-            comando = conexao.prepareStatement(SQL_BUSCAR_TODOS);
+            comando = conexao.prepareStatement(SQL_BUSCAR_TODAS);
             //Executa o comando e obtém o resultado da consulta
             resultado = comando.executeQuery();
             //O método next retornar boolean informando se existe um próximo
             //elemento para iterar
             while (resultado.next()) {
-                Cliente cliente = this.extrairLinhaResultadoBuscarTodas(resultado);
+                Bebida bebida = this.extrairLinhaResultadoBuscarTodas(resultado);
                 //Adiciona um item à lista que será retornada
-                listaClientes.add(cliente);
+                listaBebidas.add(bebida);
             }
         } finally {
             //Todo objeto que referencie o banco de dados deve ser fechado
             BancoDadosUtil.fecharChamadasBancoDados(conexao, comando, resultado);
         }
-        return listaClientes;
+        return listaBebidas;
     }
 
-    private Cliente extrairLinhaResultadoBuscarTodas(ResultSet resultado) throws SQLException {
-        Cliente cliente = this.extrairLinhaResultado(resultado);
-        return cliente;
+    private Bebida extrairLinhaResultadoBuscarTodas(ResultSet resultado) throws SQLException {
+        Bebida bebida = this.extrairLinhaResultado(resultado);
+        return bebida;
     }
 
-    private Cliente extrairLinhaResultado(ResultSet resultado) throws SQLException {
+    private Bebida extrairLinhaResultado(ResultSet resultado) throws SQLException {
         //Instancia um novo objeto e atribui os valores vindo do BD
         //(Note que no BD o index inicia por 1)
-        Cliente cliente = new Cliente();
-        cliente.setNome(resultado.getString(1));
-        cliente.setCPF(resultado.getString(2));
-        cliente.setRG(resultado.getString(3));
-        
-        java.sql.Date dataNascimento = resultado.getDate(4);
-        cliente.setDataNascimento(new java.sql.Date(dataNascimento.getTime()));
-        
-        String sexo = resultado.getString(5);
-        cliente.setSexo(sexo.charAt(0));
-        
-        cliente.setTelefone(resultado.getString(6));
-        cliente.setEndereco(resultado.getString(7));
-        cliente.setId(resultado.getInt(8));
+        Bebida bebida = new Bebida();
+        bebida.setMarca(resultado.getString(1));
+        bebida.setSabor(resultado.getString(2));
+        bebida.setVolume(resultado.getString(3));
+        bebida.setPreco(resultado.getDouble(4));
+        bebida.setId(resultado.getInt(5));
 
-        return cliente;
+        return bebida;
     }
 }

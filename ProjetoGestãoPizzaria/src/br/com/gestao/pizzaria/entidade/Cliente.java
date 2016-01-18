@@ -20,6 +20,24 @@ public class Cliente {
     private String telefone;
     private String endereco;
     private int id = -1;
+    private int divideEm;
+    private double valorDevido;
+
+    public int getDivideEm() {
+        return divideEm;
+    }
+
+    public void setDivideEm(int divideEm) {
+        this.divideEm = divideEm;
+    }
+
+    public double getValorDevido() {
+        return valorDevido;
+    }
+
+    public void setValorDevido(double valorDevido) {
+        this.valorDevido = valorDevido;
+    }
 
     public String getNome() {
         return nome;

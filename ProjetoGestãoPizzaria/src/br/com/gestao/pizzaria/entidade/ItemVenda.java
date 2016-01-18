@@ -15,6 +15,7 @@ public class ItemVenda{
     private int Quantidade;
     private int idPedido;
     private int idPizza = -1;
+    private int idBebida;
     private char tamanho;
 
     public int getId() {
@@ -63,6 +64,5 @@ public class ItemVenda{
 
     public void setIdBebida(int idBebida) {
         this.idBebida = idBebida;
-    }
-    private int idBebida;   
+    }  
 }

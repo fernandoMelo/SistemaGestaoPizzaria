@@ -9,9 +9,9 @@ package br.com.gestao.pizzaria.excecao;
  *
  * @author melot_000
  */
-public class CaixaAbertoException extends GestaoPizzariaException{
-    
-    public CaixaAbertoException(String mensagem){
-        super(mensagem);
+public class NenhumItemAdicionadoException extends GestaoPizzariaException {
+
+    public NenhumItemAdicionadoException() {
+        super("Nenhum item adicionado.");
     }
 }

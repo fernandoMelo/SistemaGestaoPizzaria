@@ -10,8 +10,11 @@ import br.com.gestao.pizzaria.entidade.Cliente;
 import br.com.gestao.pizzaria.entidade.ItemVenda;
 import br.com.gestao.pizzaria.entidade.Pedido;
 import br.com.gestao.pizzaria.entidade.Pizza;
+import br.com.gestao.pizzaria.excecao.ClienteNaoSelecionadoException;
+import br.com.gestao.pizzaria.excecao.NenhumItemAdicionadoException;
 import br.com.gestao.pizzaria.negocio.BebidaBO;
 import br.com.gestao.pizzaria.negocio.ClienteBO;
+import br.com.gestao.pizzaria.negocio.PedidoBO;
 import br.com.gestao.pizzaria.negocio.PizzaBO;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +34,7 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
     private List<ItemVenda> Itens = new ArrayList<>();
 
     private Cliente cliente;
+    private Cliente clienteSelecionado = null;
     private List<Cliente> clientes = new ArrayList<>();
 
     private Bebida bebida;
@@ -411,8 +415,7 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
 
     private void tblGenericaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblGenericaMouseClicked
         if (rdoDelivery.isSelected()) {
-
-            cliente = clientes.get(tblGenerica.getSelectedRow());
+            clienteSelecionado = clientes.get(tblGenerica.getSelectedRow());
             txtTipoPedido.setText(cliente.getNome());
             lblIr.setText("");
             lblAcaoTipoPedido.setText("Nome do Cliente: ");
@@ -426,10 +429,61 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
     private void rdoPizzaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdoPizzaItemStateChanged
         cmbTamanho.setEnabled(false);
     }//GEN-LAST:event_rdoPizzaItemStateChanged
-    
-    private void salvarPedido(){
-    
+
+    private void salvarPedido() {
+        try {
+            this.validarCampos();
+            this.adicionarCliente();
+
+            PedidoBO pedidoBO = new PedidoBO();
+            pedidoBO.inserir(pedido, Itens);
+
+        } catch (NenhumItemAdicionadoException e) {
+            JOptionPane.showMessageDialog(null, e, "Salvar pedido", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro inesperado! Informe a mensagem de erro ao administrador do sistema.", "Salvar pedido", JOptionPane.ERROR_MESSAGE);
+        }
     }
+
+    private void adicionarCliente() {
+        if (rdoDelivery.isSelected() && clienteSelecionado == null) {
+            throw new ClienteNaoSelecionadoException();
+        } else {
+            if (clienteSelecionado != null) {
+                pedido.setIdCliente(clienteSelecionado.getId());
+            } else {
+                pedido.setIdCliente(0);
+            }
+        }
+        for (ItemVenda item : Itens) {
+            for (Pizza pizza : pizzas) {
+                if (pizza.getId() == item.getIdPizza()) {
+                    if (item.getTamanho() == 'P') {
+                        pedido.setValorTotal(pedido.getValorTotal() + pizza.getPrecoPequena());
+                    } else if (item.getTamanho() == 'M') {
+                        pedido.setValorTotal(pedido.getValorTotal() + pizza.getPrecoMedia());
+                    } else if (item.getTamanho() == 'G') {
+                        pedido.setValorTotal(pedido.getValorTotal() + pizza.getPrecoGrande());
+                    } else {
+                        pedido.setValorTotal(pedido.getValorTotal() + pizza.getPrecoGigante());
+                    }
+                }
+                for (Bebida bebida : bebidas) {
+                    if (bebida.getId() == item.getIdBebida()) {
+                        pedido.setValorTotal(pedido.getValorTotal() + bebida.getPreco());
+                    }
+                }
+            }
+        }
+    }
+
+    private void validarCampos() {
+        if (rdoBalcao.isSelected() && rdoMesa.isSelected() && rdoDelivery.isSelected()) {
+        } else {
+            throw new NenhumItemAdicionadoException();
+        }
+    }
+
     private void removerItem() {
         int linhaSelecionada = tblItensAdicionados.getSelectedRow();
 
@@ -648,6 +702,7 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
 
     private class ModeloTabelaCliente extends AbstractTableModel {
 
+        @Override
         public String getColumnName(int coluna) {
             if (coluna == 0) {
                 return "NOME";
