@@ -12,6 +12,7 @@ import br.com.gestao.pizzaria.entidade.Pedido;
 import br.com.gestao.pizzaria.entidade.Pizza;
 import br.com.gestao.pizzaria.excecao.ClienteNaoSelecionadoException;
 import br.com.gestao.pizzaria.excecao.NenhumItemAdicionadoException;
+import br.com.gestao.pizzaria.excecao.NenhumTipoPedidoAdicionadoException;
 import br.com.gestao.pizzaria.negocio.BebidaBO;
 import br.com.gestao.pizzaria.negocio.ClienteBO;
 import br.com.gestao.pizzaria.negocio.PedidoBO;
@@ -416,7 +417,7 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
     private void tblGenericaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblGenericaMouseClicked
         if (rdoDelivery.isSelected()) {
             clienteSelecionado = clientes.get(tblGenerica.getSelectedRow());
-            txtTipoPedido.setText(cliente.getNome());
+            txtTipoPedido.setText(clienteSelecionado.getNome());
             lblIr.setText("");
             lblAcaoTipoPedido.setText("Nome do Cliente: ");
         }
@@ -478,8 +479,11 @@ public class CadastrarPedidoForm extends javax.swing.JFrame {
     }
 
     private void validarCampos() {
-        if (rdoBalcao.isSelected() && rdoMesa.isSelected() && rdoDelivery.isSelected()) {
+        if (!rdoBalcao.isSelected() && !rdoMesa.isSelected() && !rdoDelivery.isSelected()) {
         } else {
+            throw new NenhumTipoPedidoAdicionadoException();
+        }
+        if(!rdoBebida.isSelected() && !rdoPizza.isSelected()){
             throw new NenhumItemAdicionadoException();
         }
     }

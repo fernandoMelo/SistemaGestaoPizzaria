@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/melot_000/Desktop/SistemaGestaoPizzaria/ProjetoGestãoPizzaria/src/br/com/gestao/pizzaria/persistencia/PedidoDAO.java</file>
             <file>file:/C:/Users/melot_000/Desktop/SistemaGestaoPizzaria/ProjetoGestãoPizzaria/src/br/com/gestao/pizzaria/entidade/Pedido.java</file>
-            <file>file:/C:/Users/melot_000/Desktop/SistemaGestaoPizzaria/ProjetoGestãoPizzaria/src/br/com/gestao/pizzaria/apresentacao/TelaInicialSistema.java</file>
-            <file>file:/C:/Users/melot_000/Desktop/SistemaGestaoPizzaria/ProjetoGestãoPizzaria/src/br/com/gestao/pizzaria/entidade/Cliente.java</file>
+            <file>file:/C:/Users/melot_000/Desktop/SistemaGestaoPizzaria/ProjetoGestãoPizzaria/src/br/com/gestao/pizzaria/negocio/PedidoBO.java</file>
             <file>file:/C:/Users/melot_000/Desktop/SistemaGestaoPizzaria/ProjetoGestãoPizzaria/src/br/com/gestao/pizzaria/apresentacao/CadastrarPedidoForm.java</file>
-            <file>file:/C:/Users/melot_000/Desktop/SistemaGestaoPizzaria/ProjetoGestãoPizzaria/src/br/com/gestao/pizzaria/entidade/ItemVenda.java</file>
         </group>
     </open-files>
 </project-private>

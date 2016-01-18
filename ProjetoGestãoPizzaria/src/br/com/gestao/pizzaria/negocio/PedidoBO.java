@@ -7,8 +7,10 @@ package br.com.gestao.pizzaria.negocio;
 
 import br.com.gestao.pizzaria.persistencia.BebidaDAO;
 import br.com.gestao.pizzaria.entidade.Bebida;
+import br.com.gestao.pizzaria.entidade.ItemVenda;
 import br.com.gestao.pizzaria.entidade.Pedido;
 import br.com.gestao.pizzaria.excecao.PesquisaSemResultadoException;
+import br.com.gestao.pizzaria.persistencia.PedidoDAO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.List;
  */
 public class PedidoBO {
 
-    public void inserir(Pedido pedido, List itens) throws SQLException {
+    public void inserir(Pedido pedido, List<ItemVenda> itens) throws SQLException {
 
         PedidoDAO pedidoDAO = new PedidoDAO();
         pedidoDAO.inserir(pedido, itens);
